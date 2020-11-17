@@ -35,14 +35,28 @@ pub struct LoginForm {
 async fn index(user_id:Identity) -> String {
     use schema::users::dsl::*;
     let connection = establish_connection();
+
+    use diesel::sql_query;
+    let results: Vec<Tree> = sql_query("
+        WITH RECURSIVE r AS (
+            SELECT id, name AS path, 1 AS depth FROM directories WHERE id = 1
+            UNION ALL
+            SELECT directories.id, r.path || directories.name as path, r.depth + 1 FROM directories INNER JOIN r ON directories.parent = r.id
+            )
+            SELECT id,path,depth FROM r order by path
+    ").load(&connection).expect("error");
+
+    println!("{:?}", results);
+
     let results = users.load::<User>(&connection).expect("error loading users");
     let user_name = match results.first() {
         Some(user) => user.email.clone(),
         None => "Not Found User".to_string()
     };
+
     format!(
         "Hello DB Record {}",
-        user_name
+        "success"
     )
 }
 

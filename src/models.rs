@@ -9,8 +9,20 @@ pub struct User {
     pub created_at: NaiveDateTime,
 }
 
-#[derive(Debug, Clone, Queryable)]
+use diesel::deserialize::QueryableByName;
+#[derive(Debug, Clone)]
 pub struct Tree {
     pub id: i64,
     pub path: String,
+}
+
+impl QueryableByName<diesel::pg::Pg> for Tree {
+    fn build<R: diesel::row::NamedRow<diesel::pg::Pg>>(
+        row: &R,
+    ) -> diesel::deserialize::Result<Self> {
+        Ok(Tree {
+            id: row.get("id")?,
+            path: row.get("path")?,
+        })
+    }
 }
