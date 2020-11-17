@@ -36,11 +36,10 @@ async fn index(user_id:Identity) -> String {
     use schema::users::dsl::*;
     let connection = establish_connection();
     let results = users.load::<User>(&connection).expect("error loading users");
-    let mut user_name = "Not Found User".to_string();
-    if let user = results.first().unwrap() {
-        user_name = user.email.clone();
-    }
-
+    let user_name = match results.first() {
+        Some(user) => user.email.clone(),
+        None => "Not Found User".to_string()
+    };
     format!(
         "Hello DB Record {}",
         user_name
