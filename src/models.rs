@@ -8,3 +8,9 @@ pub struct User {
     pub password: String,
     pub created_at: NaiveDateTime,
 }
+
+#[derive(Debug, Clone, Queryable)]
+pub struct Tree {
+    pub id: i64,
+    pub path: String,
+}

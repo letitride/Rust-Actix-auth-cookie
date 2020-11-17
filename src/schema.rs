@@ -22,7 +22,7 @@ table! {
         id -> Int4,
         email -> Text,
         password -> Text,
-        created_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
     }
 }
 
