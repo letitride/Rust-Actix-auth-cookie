@@ -51,18 +51,18 @@ SELECT directories.id, r.path || directories.name as path, r.depth + 1 FROM dire
 )
 SELECT id,path,depth FROM r order by path;
 
-id |          path          | depth 
+ id |          path          | depth 
 ----+------------------------+-------
   1 | /                      |     1
   2 | /home/                 |     2
-  7 | /var/                  |     2
-  8 | /opt/                  |     2
   3 | /home/user1/           |     3
   4 | /home/user2/           |     3
-  5 | /home/user3/           |     3
-  9 | /var/logs/             |     3
- 10 | /opt/oracle/           |     3
   6 | /home/user2/workspace/ |     4
- 11 | /var/logs/httpd/       |     4
+  5 | /home/user3/           |     3
+  8 | /opt/                  |     2
+ 10 | /opt/oracle/           |     3
+  7 | /var/                  |     2
+  9 | /var/logs/             |     3
  12 | /var/logs/app/         |     4
+ 11 | /var/logs/httpd/       |     4
 ```
