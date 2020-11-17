@@ -382,7 +382,9 @@ dependencies = [
  "actix-identity",
  "actix-web",
  "env_logger",
+ "log",
  "rand",
+ "serde",
 ]
 
 [[package]]
