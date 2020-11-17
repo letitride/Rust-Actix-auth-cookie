@@ -13,3 +13,7 @@ env_logger = "0.8"
 log = "0.4"
 rand = "0.7"
 serde = { version = "1", features = ["derive"] }
+dotenv = "0.15"
+chrono = "0.4"
+diesel = { version = "1.4.4", features = ["postgres", "chrono"] }
+
