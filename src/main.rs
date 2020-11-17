@@ -4,15 +4,46 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 use log::debug;
 
+
+#[macro_use]
+extern crate diesel;
+extern crate dotenv;
+
+use diesel::prelude::*;
+use diesel::pg::PgConnection;
+use dotenv::dotenv;
+use std::env;
+
+pub mod schema;
+pub mod models;
+use models::*;
+
+pub fn establish_connection() -> PgConnection {
+    dotenv().ok();
+
+    let database_url = env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set");
+    PgConnection::establish(&database_url)
+        .expect(&format!("Error connecting to {}", database_url))
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LoginForm {
     email: String,
 }
 
-async fn index(id:Identity) -> String {
+async fn index(user_id:Identity) -> String {
+    use schema::users::dsl::*;
+    let connection = establish_connection();
+    let results = users.load::<User>(&connection).expect("error loading users");
+    let mut user_name = "Not Found User".to_string();
+    if let user = results.first().unwrap() {
+        user_name = user.email.clone();
+    }
+
     format!(
-        "Hello {}",
-        id.identity().unwrap_or_else(|| "Anonymous".to_owned())
+        "Hello DB Record {}",
+        user_name
     )
 }
 
