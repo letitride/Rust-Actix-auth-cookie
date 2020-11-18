@@ -94,3 +94,35 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
+
+#[cfg(test)]
+mod tests {
+    use actix_web::test;
+    use super::*;
+
+    #[actix_rt::test]
+    async fn test_index() {
+        let private_key = rand::thread_rng().gen::<[u8; 32]>();
+
+        let mut app = test::init_service(
+            App::new()
+                .wrap(IdentityService::new(
+                    CookieIdentityPolicy::new(&private_key)
+                                .name("auth-example")
+                                .secure(false),
+                        )
+                )
+                .route("/", web::get().to(index)))
+                .await;
+        let req = test::TestRequest::get().uri("/").to_request();
+        let resp = test::call_service(&mut app, req).await;
+        println!("{:?}", resp);
+        let body = test::read_body(resp).await;
+        //let converted: String = String::from_utf8(bytes.to_vec()).unwrap();
+        let body = String::from_utf8(body.to_vec()).unwrap();
+        println!("{}", body);
+        //resp.map_body(|t| println("{}", t))
+        //println!("{}", resp.take_body()::body);
+        assert_eq!(body, "Hello DB Record success");
+    }
+}

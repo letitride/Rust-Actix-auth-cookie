@@ -66,3 +66,13 @@ SELECT id,path,depth FROM r order by path;
  12 | /var/logs/app/         |     4
  11 | /var/logs/httpd/       |     4
 ```
+
+```
+error[E0277]: the trait bound `models::Tree: diesel::deserialize::QueryableByName<diesel::pg::Pg>` is not satisfied
+  --> src/main.rs:47:8
+   |
+47 |     ").load(&connection).expect("error");
+   |        ^^^^ the trait `diesel::deserialize::QueryableByName<diesel::pg::Pg>` is not implemented for `models::Tree`
+   |
+   = note: required because of the requirements on the impl of `diesel::query_dsl::LoadQuery<diesel::PgConnection, models::Tree>` for `diesel::query_builder::SqlQuery`
+```

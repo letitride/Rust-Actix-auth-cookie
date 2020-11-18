@@ -14,7 +14,9 @@ use diesel::deserialize::QueryableByName;
 pub struct Tree {
     pub id: i64,
     pub path: String,
+    pub depth: i32,
 }
+
 
 impl QueryableByName<diesel::pg::Pg> for Tree {
     fn build<R: diesel::row::NamedRow<diesel::pg::Pg>>(
@@ -23,6 +25,7 @@ impl QueryableByName<diesel::pg::Pg> for Tree {
         Ok(Tree {
             id: row.get("id")?,
             path: row.get("path")?,
+            depth: row.get("depth")?,
         })
     }
 }
