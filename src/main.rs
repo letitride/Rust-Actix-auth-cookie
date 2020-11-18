@@ -118,11 +118,8 @@ mod tests {
         let resp = test::call_service(&mut app, req).await;
         println!("{:?}", resp);
         let body = test::read_body(resp).await;
-        //let converted: String = String::from_utf8(bytes.to_vec()).unwrap();
         let body = String::from_utf8(body.to_vec()).unwrap();
         println!("{}", body);
-        //resp.map_body(|t| println("{}", t))
-        //println!("{}", resp.take_body()::body);
         assert_eq!(body, "Hello DB Record success");
     }
 }
